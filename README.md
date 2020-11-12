@@ -3,4 +3,4 @@
 A small project to set up a CI infrastructure based on docker providing Jenkins, SQL-Server and a Jenkins agent with Python, ODBC etc.
 
 How to set up such a CI infrastructure is described in `Docker_based_CI_infrastructure.md`.
-`jenkins_agent_python.Dockerfile` describes a jenkins agent with python, ODBC, GIT, etc.
+`jenkins_agent_python.Dockerfile` allows to build an image containing a jenkins agent with python, ODBC client, GIT client.
