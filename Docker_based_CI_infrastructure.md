@@ -222,8 +222,8 @@ pip list
 
 ```ps
 docker pull jenkins/inbound-agent
-docker stop jenkins_agent_python_1
-docker rm jenkins_agent_python_1
+# docker stop jenkins_agent_python_1
+# docker rm jenkins_agent_python_1
 # docker run --init jenkins/inbound-agent -url http://jenkins-server:port <secret> <agent name>
 docker run --hostname python_1 --name jenkins_agent_python_1 -d --init jenkins_agent_python -workDir=/home/jenkins/agent -url http://172.17.0.3:8080 a6c70db272f6e7272a145dccf180afdcbab96bc45979e14b86a00027e1c796a9 python_1
 ```
@@ -265,9 +265,8 @@ The image can be created eg from VSCode command palette: VSCode > View > Command
 # docker volume rm jenkins_agent_python_1_vol_agent
 docker volume create jenkins_agent_python_1_vol_agent
 
-docker stop jenkins_agent_python_1
-
-docker rm jenkins_agent_python_1
+# docker stop jenkins_agent_python_1
+# docker rm jenkins_agent_python_1
 
 docker run `
     --hostname jenkins_agent_python_1 `
