@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  sql1:
+    container_name: sql1
+    hostname: sql1
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_db_volume:/var/opt/mssql
+      - shared_bulk_volume:/var/opt/bulk
+    networks:
+     - container_net
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment: 
+      - "ACCEPT_EULA=Y" 
+      - "MSSQL_SA_PASSWORD=Password001*"
+  myjenkins:
+    container_name: myjenkins
+    hostname: myjenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_server_volume:/var/jenkins_home
+    networks:
+     - container_net
+    image: jenkins/jenkins        
+  jenkins_agent_python_1:
+    container_name: jenkins_agent_python_1
+    hostname: jenkins_agent_python_1
+    build:
+      context: .
+      dockerfile: jenkins_agent_python.Dockerfile
+    restart: always
+    environment: 
+      - JENKINS_URL=http://myjenkins:8080
+      - JENKINS_SECRET=a6c70db272f6e7272a145dccf180afdcbab96bc45979e14b86a00027e1c796a9
+      - JENKINS_AGENT_NAME=python_1
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+    volumes:
+     - jenkins_agent_python_1_vol_agent:/home/jenkins/agent
+     - shared_bulk_volume:/var/opt/bulk
+    networks:
+     - container_net
+    depends_on:
+     - myjenkins
+    init: true
+
+networks:
+  container_net:
+
+volumes:
+  mssql_db_volume:
+    external: true
+  shared_bulk_volume:
+    external: true
+  jenkins_server_volume:
+    external: true
+  jenkins_agent_python_1_vol_agent:
+    external: true
