@@ -64,6 +64,8 @@ Environment variables can be defined with
       - "Variable2=Value2"
 ```
 
+The environment variable `TZ` allows to define the time zone, eg `- "TZ=Europe/Zurich"`. Different options for the time zone can be found with linux command `tzselect`.
+
 The attribute `depends_on` allows to define dependencies between containers
 The option `restart: always` allows to restart a container in case it crashes. This is also useful if a related container is not available at the first start. 
 The option `init: true` corresponds to `--init` option of `docker run`.

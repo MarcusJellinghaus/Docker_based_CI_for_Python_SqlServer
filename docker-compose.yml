@@ -14,12 +14,15 @@ services:
     environment: 
       - "ACCEPT_EULA=Y" 
       - "MSSQL_SA_PASSWORD=Password001*"
+      - "TZ=Europe/Zurich"
   myjenkins:
     container_name: myjenkins
     hostname: myjenkins
     ports:
       - "8080:8080"
       - "50000:50000"
+    environment: 
+      - "TZ=Europe/Zurich"
     volumes:
       - jenkins_server_volume:/var/jenkins_home
     networks:
@@ -37,6 +40,7 @@ services:
       - JENKINS_SECRET=a6c70db272f6e7272a145dccf180afdcbab96bc45979e14b86a00027e1c796a9
       - JENKINS_AGENT_NAME=python_1
       - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+      - "TZ=Europe/Zurich"
     volumes:
      - jenkins_agent_python_1_vol_agent:/home/jenkins/agent
      - shared_bulk_volume:/var/opt/bulk
