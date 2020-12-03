@@ -73,15 +73,20 @@ The option `init: true` corresponds to `--init` option of `docker run`.
 Not all parameters of `docker run` are available in a `docker-compose.yml` file. Eg the memory limitation (`docker run --memory`) is only available with the *[...] resources key under deploy. deploy configuration only takes effect when using docker stack deploy, and is ignored by docker-compose.* [(Source](https://docs.docker.com/compose/compose-file/compose-versioning/#upgrading)).
 
 ### Networks
+
 All networks referenced by services need to be listed in this section.
 A simple example:
 
-```
+```yml
 networks:
   container_net:
+    name: container_net
 ```
 
+If the name is not defined, the network would have the name of the folder containing the docker-compose.yml.
+
 ### Volumes
+
 All volumes referenced by services need to be listed in this section.
 
 Usually, docker compose creates new volumes called [projectname]_[volumename].
