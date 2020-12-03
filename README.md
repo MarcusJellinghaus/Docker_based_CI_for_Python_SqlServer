@@ -2,7 +2,7 @@
 
 A small project to demonstrate how to use **Docker** to set up a CI infrastructure providing Jenkins, SQL-Server and a Jenkins agent with Python, ODBC etc.
 The SQL-Server will be available on `127.0.0.1` with username `SA`.
-The Jenkins Server will be available on `localhost:8080`.
+The Jenkins Server will be available on [http://localhost:8080/](http://localhost:8080/)`.
 To benefit from the Jenkins agent with Python, the agent needs to be configured in the Jenkins server. 
 
 ## First step: Building an infrastructure with docker
