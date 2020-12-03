@@ -51,7 +51,8 @@ services:
     init: true
 
 networks:
-  container_net:
+    container_net:
+      name: container_net
 
 volumes:
   mssql_db_volume:
