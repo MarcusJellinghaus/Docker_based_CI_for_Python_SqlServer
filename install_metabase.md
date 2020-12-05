@@ -6,8 +6,10 @@ Regarding running it on docker, see the (doc)[https://www.metabase.com/docs/late
 Start it with:
 
 ```
+docker volume create metabase-data_volume
+
 docker run -d -p 3000:3000 `
-    -v ~/metabase-data:/metabase-data `
+    -v metabase-data_volume:/metabase-data `
     -e "MB_DB_FILE=/metabase-data/metabase.db" `
     --network=container_net `
     -d `
