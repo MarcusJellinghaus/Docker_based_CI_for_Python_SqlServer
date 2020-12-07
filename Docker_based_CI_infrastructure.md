@@ -52,7 +52,24 @@ Docker has a powerful API. Just type ```docker command [parameters]```. Commands
 
 If container, their host names, the volumes etc. are not specified, it is not an issue. Docker will generate these by itself.
 
+#### Container / service name
+
 To better understand what is going on, it is useful to assign container names. Using the same name as hostname allows to see this name also from inside the container. When using a network, these names can be also used (instead of IP addresses).
+
+- The name of the service is used over the network.
+- The hostname is used on the container by the hostname command.
+- The name/containername is used by the docker GUI.
+
+In a dockerfile, it looks like this.
+
+```YML
+services:
+  sql1:
+    container_name: sql1
+    hostname: sql1
+```
+
+#### Volume names
 
 Named volumes allow to reuse volumes and their data when recreating / updating a container.
 
