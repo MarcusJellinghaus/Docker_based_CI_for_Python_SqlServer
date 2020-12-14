@@ -33,7 +33,7 @@ Docker has a powerful API. Just type ```docker command [parameters]```. Commands
   - `--hostname [hostname]`   - defines the host name, visible on the container with the hostname command
   - `-d`                      - runs a container in detached mode, i.e. console is ready for next command
   - `-e "variablename=value"` - set any environment variable
-  - `-e network=[networkname]`- to assign the container to a certain network
+  - `--network=[networkname]`- to assign the container to a certain network
 - `stop [containername]`      - to stop a container
 - `rm [containername]`        - to delete a container (careful - manual configuration needs to be done again if not stored in a named volume)
 - `ps -a`                     - gives an overview of currently running containers
@@ -90,13 +90,15 @@ IP addresses can be seen with `docker network inspect [network_name]`
 
 A separate network can be created with
 
-```
+```PS
 docker network create [network_name]
 ```
 
 e.g. `docker network create container_net`
 
 A container can be assigned to a network with `docker run --network [networkname]`. Then, the hostname can be used for accessing the machine.
+
+By using the `run` command with the option `-p`, port(s) of the relevant docker container(s) get exposed externally, so that they are visible to other containers on the same network, to the host machine and also to other machines. With the expose command, it is possible to control whether ports should be visible to other machines, see also [there](https://www.whitesourcesoftware.com/free-developer-tools/blog/docker-expose-port/).
 
 
 ### Getting information from a docker container
