@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  dashboard-loadbalancer
+  namespace: kubernetes-dashboard
+spec:
+  selector:
+    k8s-app: kubernetes-dashboard
+  type:  LoadBalancer
+  ports:
+  - name:  sql
+    port:  8443
+    targetPort:  8443

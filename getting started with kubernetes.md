@@ -19,6 +19,10 @@ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboar
 
 Connect to it: [URL]( http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 
+## Access Kubernetes dashboard with loadbalancer
+See yml file, start with
+`kubectl apply -f .\Kubernetes_configs\dashboard-loadbalancer.yml`
+
 
 ## Get helm chart packs from https://artifacthub.io/
 
@@ -76,6 +80,10 @@ To upgrade this helm chart:
 see Kubernetes_configs/mariadb.yaml
 
 `kubectl apply -f .\Kubernetes_configs\mariadb.yaml`
+
+
+## Dashboard
+Kubernetes has a built in dashboard. This can be usually access
 
 
 
