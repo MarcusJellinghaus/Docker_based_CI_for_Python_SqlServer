@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  ports:
+  - port: 8080
+    name: ui
+  - port: 50000
+    name: agents
+  clusterIP: None
+  selector:
+    app: jenkins
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins
+spec:
+  selector:
+    matchLabels:
+      app: jenkins # has to match .spec.template.metadata.labels
+  serviceName: "jenkins"
+  replicas: 1 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: jenkins # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:2.263.1-lts-centos7
+
+        ports:
+        - containerPort: 8080
+          name: ui
+        - containerPort: 50000
+          name: agents
+        volumeMounts:
+        - name: jenkins-server-pvc
+          mountPath: /var/jenkins_home
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: my-secret-pw12$
+
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-server-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "hostpath"  # default created by docker
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  jenkins-loadbalancer
+spec:
+  selector:
+    app:  jenkins
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  8081
+    targetPort:  8080
+  - name:  agents
+    port:  50001
+    targetPort:  50000

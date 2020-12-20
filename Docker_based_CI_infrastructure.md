@@ -216,7 +216,7 @@ docker run --hostname myjenkins --name myjenkins --network=container_net -d -p 8
   - Click on Ignore browser preference and force this language to all users checkbox.
 - Set up an agent:
   - Node Name: python_1 (as per section "Install and use Jenkins agent")
-  - WorkDir: "/home/jenkins/agent"
+  - Remote root directory: "/home/jenkins/agent"
   - copy secret from node as use for the installation of the Jenkins agent.
 - Create a first project
   - restrict it to the agent
@@ -359,10 +359,10 @@ On top, it might still be useful to run a Jenkins agent on Windows. If no other 
 - Mailer
 - Locale
 - Further Pipeline addins
-- Pipeline: Basic steps' ?
-- Pipeline Job ?
-- Pipeline: Node and Processes ?
-- Jenkins GIT
+  - Pipeline: Basic steps' ?
+  - Pipeline Job ?
+  - Pipeline: Node and Processes ?
+  - Jenkins GIT
 
 #### Used
 
