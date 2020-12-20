@@ -1,0 +1,88 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert","kompose.version":"1.21.0 (992df58d8)"},"creationTimestamp":null,"labels":{"io.kompose.service":"myjenkins"},"name":"myjenkins","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"myjenkins"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert","kompose.version":"1.21.0 (992df58d8)"},"creationTimestamp":null,"labels":{"io.kompose.network/container-net":"true","io.kompose.service":"myjenkins"}},"spec":{"containers":[{"env":[{"name":"TZ","value":"Europe/Zurich"}],"image":"jenkins/jenkins","imagePullPolicy":"","name":"myjenkins","ports":[{"containerPort":8080},{"containerPort":50000}],"resources":{},"volumeMounts":[{"mountPath":"/var/jenkins_home","name":"jenkins-server-volume"}]}],"hostname":"myjenkins","restartPolicy":"Always","serviceAccountName":"","volumes":[{"name":"jenkins-server-volume","persistentVolumeClaim":{"claimName":"jenkins-server-volume"}}]}}},"status":{}}
+  creationTimestamp: "2020-11-14T22:04:43Z"
+  generation: 2
+  labels:
+    io.kompose.service: myjenkins
+  name: myjenkins
+  namespace: default
+  resourceVersion: "1211456"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/myjenkins
+  uid: 85a571ed-5764-480f-a36c-70d2661a487d
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: myjenkins
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/container-net: "true"
+        io.kompose.service: myjenkins
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Europe/Zurich
+        image: jenkins/jenkins
+        imagePullPolicy: Always
+        name: myjenkins
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-server-volume
+      dnsPolicy: ClusterFirst
+      hostname: myjenkins
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: jenkins-server-volume
+        persistentVolumeClaim:
+          claimName: jenkins-server-volume
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2020-11-14T22:04:43Z"
+    lastUpdateTime: "2020-11-14T22:18:39Z"
+    message: ReplicaSet "myjenkins-7c5cc86c58" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2020-12-19T19:03:18Z"
+    lastUpdateTime: "2020-12-19T19:03:18Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

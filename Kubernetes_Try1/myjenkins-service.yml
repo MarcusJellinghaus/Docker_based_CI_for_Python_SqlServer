@@ -1,0 +1,71 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: myjenkins
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/myjenkins
+  uid: 0c246931-a62e-4c21-990c-4448728945e9
+  resourceVersion: '4731'
+  creationTimestamp: '2020-11-14T22:04:43Z'
+  labels:
+    io.kompose.service: myjenkins
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose
+      convert","kompose.version":"1.21.0
+      (992df58d8)"},"creationTimestamp":null,"labels":{"io.kompose.service":"myjenkins"},"name":"myjenkins","namespace":"default"},"spec":{"ports":[{"name":"8080","port":8080,"targetPort":8080},{"name":"50000","port":50000,"targetPort":50000}],"selector":{"io.kompose.service":"myjenkins"}},"status":{"loadBalancer":{}}}
+  managedFields:
+    - manager: kubectl-client-side-apply
+      operation: Update
+      apiVersion: v1
+      time: '2020-11-14T22:04:43Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kompose.cmd': {}
+            'f:kompose.version': {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+          'f:labels':
+            .: {}
+            'f:io.kompose.service': {}
+        'f:spec':
+          'f:ports':
+            .: {}
+            'k:{"port":8080,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":50000,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector':
+            .: {}
+            'f:io.kompose.service': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  ports:
+    - name: '8080'
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: '50000'
+      protocol: TCP
+      port: 50000
+      targetPort: 50000
+  selector:
+    io.kompose.service: myjenkins
+  clusterIP: 10.99.134.208
+  type: ClusterIP
+  sessionAffinity: None
+status:
+  loadBalancer: {}
