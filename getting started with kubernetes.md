@@ -72,8 +72,10 @@ To upgrade this helm chart:
 ```
 
 
-## Microd
+## MariaDb with own config file
+see Kubernetes_configs/mariadb.yaml
 
+`kubectl apply -f .\Kubernetes_configs\mariadb.yaml`
 
 
 
