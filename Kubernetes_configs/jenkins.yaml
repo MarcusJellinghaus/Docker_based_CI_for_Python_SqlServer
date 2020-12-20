@@ -43,8 +43,8 @@ spec:
         - name: jenkins-server-pvc
           mountPath: /var/jenkins_home
         env:
-          - name: MYSQL_ROOT_PASSWORD
-            value: my-secret-pw12$
+          - name: TZ
+            value: Europe/Zurich
 
   volumeClaimTemplates:
   - metadata:
