@@ -85,6 +85,8 @@ Deployments are being managed via kubectl. Deployments manage replicatesets whic
 
 Configuration files exist eg for deployments and services.
 
+It seems that kubernetes does not like underscores `_` in object names. Use `-` instead.
+
 ### Apply configuration file
 `kubectl apply -f configuration_file.yaml` - apply a configuration file, also execute to apply changes.
 `kubectl get deployment [deployment_name] - o yaml > configuration_file.yaml` - export config file, including status and other generated stuff (like timestamps).
@@ -203,7 +205,7 @@ A stateful applications needs to store some data. Alternatively, there are also 
 
 Stateless applications are deployed using deployments. They can be easily replicated. 
 
-Statefull applications are deployed using StatefulSets.
+Stateful applications are deployed using StatefulSets.
 
 An example for a stateful application is a mysql database.
 
