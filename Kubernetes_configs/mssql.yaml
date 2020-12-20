@@ -27,7 +27,20 @@ spec:
       labels:
         app: mssql # has to match .spec.selector.matchLabels
     spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
       terminationGracePeriodSeconds: 10
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chmod -R 777 /var/opt/bulk"]
+        volumeMounts:
+        - name: mssql-bulk
+          mountPath: /var/opt/bulk
+        securityContext:
+            runAsUser: 0
+            runAsGroup: 0
       containers:
       - name: mssql
         image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
@@ -37,7 +50,7 @@ spec:
         volumeMounts:
         - name: mssql-db-pvc
           mountPath: /var/opt/mssql
-        - name: shared-bulk-pvc
+        - name: mssql-bulk
           mountPath: /var/opt/bulk
         env:
           - name: ACCEPT_EULA
@@ -45,19 +58,15 @@ spec:
           - name: MSSQL_SA_PASSWORD
             value: Password001*
           - name: TZ
-            value: Europe/Zurich
+            value: Europe/Zurich      
+      volumes:
+      - name: mssql-bulk
+        persistentVolumeClaim:
+          claimName: mssql-bulk-pvc
 
   volumeClaimTemplates:
   - metadata:
       name: mssql-db-pvc
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "hostpath"  # default created by docker
-      resources:
-        requests:
-          storage: 1Gi
-  - metadata:
-      name: shared-bulk-pvc
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "hostpath"  # default created by docker
@@ -75,5 +84,5 @@ spec:
   type:  LoadBalancer
   ports:
   - name:  sql
-    port:  1434
+    port:  1433
     targetPort:  1433

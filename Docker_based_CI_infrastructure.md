@@ -276,7 +276,7 @@ A custom dockerfile image has been created that includes the Jenkins agent as we
 Since it is should "merge" several dockerfiles, it is based on one docker file. THe commands of the other dockerfiles have been copied in.
 Since one dockerfile can be based on another dockerfile, which can be based on another dockerfile, the content of several dockerfiles has been copied into that file.
 
-The image can be created eg from VSCode command palette: VSCode > View > Command Palette > "Docker images: Build image..." > (Enter eg "jenkins_agent_python:latest").
+The image can be created eg from VSCode command palette: VSCode > View > Command Palette > "Docker images: Build image..." > (Enter eg "jenkins_agent_python:1.1").
 
 ### Docker commands to create the container
 

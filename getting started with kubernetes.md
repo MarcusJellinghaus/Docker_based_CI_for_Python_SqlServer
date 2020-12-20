@@ -90,6 +90,36 @@ Kubernetes has a built in dashboard. This can be usually access
 
 
 
+## Using WSL + Ubuntu as Kubernetes host
+
+set default
+```PS
+wsl --set-default-version 2
+```
+
+See
+https://kubernetes.io/blog/2020/05/21/wsl-docker-kubernetes-on-the-windows-desktop/
+
+install ubunto from appstore
+
+open terminal > ubuntu terminal
+
+Update Ubunu
+```sh
+# Update the repositories and list of the packages available
+sudo apt update
+# Update the system based on the packages installed > the "-y" will approve the change automatically
+sudo apt upgrade -y
+```
+
+install go in ubunu
+```sh
+sudo apt-get install golang
+PATH="$PATH:/home/uuser/go/bin"
+```
+
+install kind
+`GO111MODULE="on" go get sigs.k8s.io/kind@v0.9.0 && kind create cluster`
 
 
 

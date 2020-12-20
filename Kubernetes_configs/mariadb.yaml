@@ -61,5 +61,5 @@ spec:
   type:  LoadBalancer
   ports:
   - name:  sql
-    port:  3308
+    port:  3306
     targetPort:  3306

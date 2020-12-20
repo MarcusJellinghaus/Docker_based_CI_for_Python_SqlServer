@@ -49,6 +49,7 @@ services:
     depends_on:
      - myjenkins
     init: true
+    # modification to volume missing
 
 networks:
     container_net:

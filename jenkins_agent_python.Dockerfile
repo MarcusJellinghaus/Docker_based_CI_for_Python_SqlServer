@@ -275,7 +275,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN python -m pip install --upgrade pip
-RUN pip install --upgrade virtualenv pytest versioneer wheel setuptools tox
+RUN pip install --upgrade virtualenv pytest versioneer wheel setuptools tox sphinx
 
 # =========================================================================================
 # RUN apt-get update && apt-get install -y git-all

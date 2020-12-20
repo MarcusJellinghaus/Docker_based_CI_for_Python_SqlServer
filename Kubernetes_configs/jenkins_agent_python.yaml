@@ -14,12 +14,24 @@ spec:
         app: jenkins-agent-python # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 10
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chmod -R 777 /var/opt/bulk"]
+        volumeMounts:
+        - name: mssql-bulk
+          mountPath: /var/opt/bulk
       containers:
       - name: jenkins-agent-python
-        image: jenkins-agent-python:1.0
+        image: jenkins-agent-python:1.1
         volumeMounts:
         - name: jenkins-agent-python-pvc
           mountPath: /var/jenkins/agent
+        - name: mssql-bulk
+          mountPath: /var/opt/bulk
         env:
         - name: JENKINS_URL
           value: http://jenkins:8080
@@ -35,6 +47,12 @@ spec:
           value: /home/jenkins/agent
         - name: TZ
           value: Europe/Zurich
+        securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+      - name: mssql-bulk
+        persistentVolumeClaim:
+          claimName: mssql-bulk-pvc
 
   volumeClaimTemplates:
   - metadata:
