@@ -17,12 +17,16 @@ How to set up such a docker based CI infrastructure is explained in `Docker_base
 Docker Compose allows to create containers based on a a config file. How to do it is explained in `Moving_to_Docker_Compose.md`. The docker compose config file is available under `docker-compose.yml`.
 `setup_compose.cmd` allows to create/update the whole stack.
 
-## Analyse data with metabase
+## Third step: Installing further containers
+
+### Analyse data with metabase
 
 [Metabase](https://www.metabase.com/) is a tool to analyse data. It can be easily installed with docker, see `install_metabase.md`. The metabase installation is than locally available on [http://localhost:3000/](http://localhoSst:3000/).
 
-## Installing other databases
+### Installing other databases
 
 Other databases can also be installed on docker, see `install different databases.md`.
 
-Moving
+### Fusion Metadata Registry
+
+See `metadata_registry.md` how to install the Fusion Metadata Registry (FMR).
