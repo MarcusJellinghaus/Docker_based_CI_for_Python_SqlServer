@@ -20,3 +20,7 @@ Docker Compose allows to create containers based on a a config file. How to do i
 ## Analyse data with metabase
 
 [Metabase](https://www.metabase.com/) is a tool to analyse data. It can be easily installed with docker, see `install_metabase.md`. The metabase installation is than locally available on [http://localhost:3000/](http://localhoSst:3000/).
+
+## Installing other databases
+
+Other databases can also be installed on docker, see `install different databases.md`.

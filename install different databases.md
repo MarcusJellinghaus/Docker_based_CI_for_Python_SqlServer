@@ -14,7 +14,7 @@ docker run --name some-mariadb -h some-mariadb -p 3306:3306 --volume maria_db_vo
 
 ## Postgres
 
-Basic call to run Postgress db:
+Basic call to run Postgres db:
 
 ```PS
 docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword-13 -d postgres
@@ -99,3 +99,7 @@ TODO: Password
 ### Using from Python
 
 Also see https://www.cockroachlabs.com/docs/v20.2/build-a-python-app-with-cockroachdb.html
+
+## Accessing the databases
+
+The different databases can be accessed with DBeaver, a database client.
