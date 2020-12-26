@@ -46,7 +46,6 @@ spec:
       name: maria-db-pvc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "hostpath"  # default created by docker
       resources:
         requests:
           storage: 1Gi

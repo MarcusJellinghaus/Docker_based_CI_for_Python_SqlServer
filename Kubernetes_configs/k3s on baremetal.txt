@@ -1,0 +1,53 @@
+
+
+## Basic setup of baremetal pcs
+
+2 Hosts:
+-Zotac1:
+-Zotac2:
+
+
+
+OS Ubuntu 18.04 LTS - Server
+- ISO with balenaEtcher to Stick
+- Installation
+
+User: zotac
+Pw: Zotac12
+
+SSH Key generated
+Public Key stored at Github, following https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+Ubuntu received GitHub 
+SSH activated
+
+Installed packages
+- Docker 
+
+## installation of k3s
+
+[Source](https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/_
+[Config options](https://rancher.com/docs/k3s/latest/en/installation/install-options/agent-config/)
+
+```
+# on master
+curl -sfL https://get.k3s.io -o k3s
+sh ./k3s --node-name zotac1 --disable servicelb --disable traefik --disable local-storage
+sudo cat /var/lib/rancher/k3s/server/node-token # outputs token
+
+# on agent(s)
+curl -sfL https://get.k3s.io -o k3s
+K3S_URL=https://zotac1:6443 K3S_TOKEN=K10b0c42b0f4efd8cfa9a478657becd6c9ffbb771406ab77734afad770612552d84::server:aedf3f81853129ca1d7f4b56055778e5 sh ./k3s --node-name zotac2
+```
+
+## Get kubeconfig
+```
+sudo cat /etc/rancher/k3s/k3s.yaml
+```
+Copy config to local `{HOME}/.kube/config` (and adjust format)
+```
+kubectl config use-context NAME
+kubectl get nodes # yey!
+```
+
+## NFS:
+use no_root_squash

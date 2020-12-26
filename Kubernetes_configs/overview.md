@@ -1,0 +1,19 @@
+
+
+## Scripts to apply kubernetes configs
+
+```
+
+kubectl delete -f ./Kubernetes_configs/jenkins_agent_python.yaml
+kubectl delete -f ./Kubernetes_configs/mssql.yaml
+kubectl delete -f ./Kubernetes_configs/shared-volume.yaml
+
+kubectl apply -f ./Kubernetes_configs/shared-volume.yaml
+kubectl apply -f ./Kubernetes_configs/mssql.yaml
+kubectl apply -f ./Kubernetes_configs/jenkins_agent_python.yaml
+```
+Get token with
+```powershell
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | sls admin-user | ForEach-Object { $_ -Split '\s+' } | Select -First 1)
+```
+eyJhbGciOiJSUzI1NiIsImtpZCI6IjZLSHRlV28wQS10YkZNMVVTRkFqUFI5bXowQzRxQUliTE1JWlJrdGpsUVUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkZWZhdWx0LXRva2VuLWtoaDZxIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImRlZmF1bHQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJmYmRjMTI1OC02YTU2LTQ4MTYtYTgwMy03Y2FkZjgwM2EyY2UiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6ZGVmYXVsdCJ9.R3bzBCsrkYekXstYpZZyjGLIrkc6eywvA1bRiD0LyIr7Kzo4nDIhZTGvrsI2yVny5GwJH4GN_fgCUxReTzNtlVBKD3-59qf5lWHmlqootJYkmk9yUeb2NXzviOPkF-0ei3FhbaOJ4YCKx19TVKWrTkUsE2A1rw3shi7HuJB6D_jvYn6TU1npiaa1OJO_JQXt0PyMlp0fSxpyXSLgInbUjq7VMPhctQivUY3xX_ZIMOksdhi1z3XAb5iSQvi43i9c5e4-xujdaFd-77jeOvCdHiS6-gU8Qaesel7Z3KvV3j3DV3LViHPdE9Q0IRYkAvoH6A7zVKEL2rhKXXw9dcM3DQ

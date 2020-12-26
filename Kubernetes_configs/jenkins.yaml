@@ -51,7 +51,6 @@ spec:
       name: jenkins-server-pvc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "hostpath"  # default created by docker
       resources:
         requests:
           storage: 1Gi
@@ -66,7 +65,7 @@ spec:
   type:  LoadBalancer
   ports:
   - name:  ui
-    port:  8081
+    port:  80
     targetPort:  8080
   - name:  agents
     port:  50000

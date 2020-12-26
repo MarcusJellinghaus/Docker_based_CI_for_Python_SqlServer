@@ -204,7 +204,7 @@ docker run --hostname myjenkins --name myjenkins --network=container_net -d -p 8
 
 - write down the secret of the container for first manual configuration
 - connect to jenkins on [http://localhost:8080](http://localhost:8080)
-- Create an admin account and note password
+- Create an admin account and note password, admin/Jenkins12
 
 ### Required manual installation
 
@@ -215,7 +215,7 @@ docker run --hostname myjenkins --name myjenkins --network=container_net -d -p 8
   - Enter the default language_LOCALE code for English: en_US
   - Click on Ignore browser preference and force this language to all users checkbox.
 - Set up an agent:
-  - Node Name: python_1 (as per section "Install and use Jenkins agent")
+  - Node Name: python_0 (as per section "Install and use Jenkins agent")
   - Remote root directory: "/home/jenkins/agent"
   - copy secret from node as use for the installation of the Jenkins agent.
 - Create a first project

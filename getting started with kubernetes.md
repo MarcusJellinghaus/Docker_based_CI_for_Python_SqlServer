@@ -4,24 +4,7 @@
 Using the one in docker, enable kubernetes in docker
 
 
-## Install Kubernetes dashboard
 
-`kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml`
-[Source](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
-
-Create a proxy to connect to it with `kubectl proxy`
-
-Get token with
-```powershell
-kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | sls admin-user | ForEach-Object { $_ -Split '\s+' } | Select -First 1)
-```
-[Source](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
-
-Connect to it: [URL]( http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
-
-## Access Kubernetes dashboard with loadbalancer
-See yml file, start with
-`kubectl apply -f .\Kubernetes_configs\dashboard-loadbalancer.yml`
 
 
 ## Get helm chart packs from https://artifacthub.io/

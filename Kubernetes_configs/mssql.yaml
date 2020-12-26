@@ -27,20 +27,7 @@ spec:
       labels:
         app: mssql # has to match .spec.selector.matchLabels
     spec:
-      securityContext:
-        runAsUser: 0
-        runAsGroup: 0
       terminationGracePeriodSeconds: 10
-      initContainers:
-      - name: volume-mount-hack
-        image: busybox
-        command: ["sh", "-c", "chmod -R 777 /var/opt/bulk"]
-        volumeMounts:
-        - name: mssql-bulk
-          mountPath: /var/opt/bulk
-        securityContext:
-            runAsUser: 0
-            runAsGroup: 0
       containers:
       - name: mssql
         image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
@@ -69,7 +56,6 @@ spec:
       name: mssql-db-pvc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "hostpath"  # default created by docker
       resources:
         requests:
           storage: 1Gi
