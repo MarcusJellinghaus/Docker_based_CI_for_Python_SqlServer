@@ -1,14 +1,14 @@
 # Kubernetes
 
-Kubernetes allows to properly manage hundreds of containers with the features likes high availablility or no downtime, scablability or high performance and disaster recover with backup and restore.
+Kubernetes allows to properly manage hundreds of containers with the features likes scablability or high performance, high availablility or no downtime,  and disaster recover with backup and restore.
 
 ## Kubernetes components
 
-Kubernetes has these components:
+Kubernetes includes these components:
 
 - *Node*: Machine to run Kubernetes
 - *Pod*: Abstraction over a container, like docker container and container image, abstraction to work only with kubernetes without using eg docker. Usually one application is executed on a pod. Each pod gets its own ip adress. If a pod dies and gets recreated, it gets a new IP adress.
-- *Service*: A service has a permanent IP adress to abstract from pods when they die and get recreated. A service is also a load balancer.
+- *Service*: A service has a permanent IP adress to abstract from pods when they die and get recreated. A service also distributes the workload over its different pods.
 - *Ingress*: An ingress allows to expose IP services to an external network and route traffic inside the cluster.
 - *ConfigMap*: Configuration information, environment variables etc. should be stored outside the built application and outside the container image. All of this should be stored in a *ConfigMap*.
 - *Secrets*: Configuration details like username and password should be stored in secrets. Secrets are base64 encoded.
@@ -17,7 +17,7 @@ Kubernetes has these components:
 - *Deployment*: Blueprint for pods, also containing the number of replicas that should be run. Most of the time, you work with deployments, not with pods. Deployments should be only used for stateless services (that do not use a volume)
 - *StatefulSet*: Allows to replicate services that need a volume, eg a database service. Stateful sets allow for replication between several copies of a stateful set. StatefulSets are complicated, therefore DBs are often hosted outside of a Kubernetes cluser.
 
-- other objects
+- Other objects kubernetes objects include:
 
     - replicationcontroller
     - deployment
@@ -28,17 +28,22 @@ Kubernetes has these components:
 
 ## Kubernetes commands
 
-- `kubelet`: The kubectl command line tool lets you control Kubernetes clusters [docs](https://kubernetes.io/docs/reference/kubectl/overview/). It allows to talk to Api Server - both for a minikube setup or a cloud cluster. Install package is called kubernetes-cli.
+- `kubectl`: The kubectl command line tool lets you control Kubernetes clusters [docs](https://kubernetes.io/docs/reference/kubectl/overview/). It allows to talk to Api Server - both for a minikube setup or a cloud cluster. Install package is called kubernetes-cli.
 - `kubeadm`: the [command](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) to bootstrap the cluster.
 - `kubelet`: the component that runs on all of the machines in your cluster and does things like starting pods and containers.
 
 ## Kubernetes setup
 
-- Simple setup, eg one node with 2 services running on it. Each node contains three processes:
+### Example for a simple setup
 
-    - container runtime: eg docker to run a container
-    - kubelet interacts with node and container. kubelet starts the pod with a container inside.
-    - kube proxy: forward to communication to a certain services
+A simple setup can consist of eg one node with 2 services running on it. Each node contains three processes:
+
+    - *container runtime*: eg docker to run a container
+    - *kubelet* interacts with the node and the containers. A kubelet starts the pod with a container inside.
+    - A *kube proxy* forwards communication to a certain services/
+
+### Example for a replicated setup with several nodes
+
 
 - Replicated setup with several nodes: Nodes gets managed by a master node
 

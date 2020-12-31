@@ -204,7 +204,7 @@ docker run --hostname myjenkins --name myjenkins --network=container_net -d -p 8
 
 - write down the secret of the container for first manual configuration
 - connect to jenkins on [http://localhost:8080](http://localhost:8080)
-- Create an admin account and note password, admin/Jenkins12
+- Create an admin account and note password
 
 ### Required manual installation
 

@@ -29,13 +29,15 @@ spec:
             - name: PROVISIONER_NAME
               value: fuseim.pri/ifs
             - name: NFS_SERVER
-              value: zotac2
+            #  value: zotac2 
+              value: stegpc
             - name: NFS_PATH
               value: /mnt/sharedfolder
       volumes:
         - name: nfs-client-root
           nfs:
-            server: zotac2
+            server: stegpc
+            # server: zotac2
             path: /mnt/sharedfolder
 ---
 apiVersion: v1
