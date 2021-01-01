@@ -12,19 +12,24 @@ Kubernetes includes these components:
 - *Ingress*: An ingress allows to expose IP services to an external network and route traffic inside the cluster.
 - *ConfigMap*: Configuration information, environment variables etc. should be stored outside the built application and outside the container image. All of this should be stored in a *ConfigMap*.
 - *Secrets*: Configuration details like username and password should be stored in secrets. Secrets are base64 encoded.
-- *Volumes*: Data should be stored outside an image, so that it is not gone after a restart of a pod. Eg db data should be stored on a physical storage outside the image in a volume, and will be loaded from this persistent storage. Storage could be local or remote. Kubernetes does not manage data persistence.
+- *Volumes* or *persistent volumes*: Data should be stored outside an image, so that it is not gone after a restart of a pod. Eg db data should be stored on a physical storage outside the image in a volume, and will be loaded from this persistent storage. Storage could be local or remote. Kubernetes does not manage data persistence.
 - *Replicas*: Replicas allow to have the same pod several times. Eg if one node goes down, the replicate on another node is still responsive - so the service has higher availability. Having several nodes also improves the performance.
 - *Deployment*: Blueprint for pods, also containing the number of replicas that should be run. Most of the time, you work with deployments, not with pods. Deployments should be only used for stateless services (that do not use a volume)
-- *StatefulSet*: Allows to replicate services that need a volume, eg a database service. Stateful sets allow for replication between several copies of a stateful set. StatefulSets are complicated, therefore DBs are often hosted outside of a Kubernetes cluser.
+- *Stateful Set*: Allows to replicate services that need a volume, eg a database service. Stateful sets allow for replication between several copies of a stateful set. StatefulSets are complicated, therefore DBs are often hosted outside of a Kubernetes cluser.
 
 - Other objects kubernetes objects include:
 
-    - replicationcontroller
+    - Namespace
+    - Replica Set
+    - Replication controller
     - deployment
     - dir / directory of configfile (?)
     - namespace
     - persistent volume claim
-    - StorageClass
+    - Storage Class
+    - Cron Jobs
+    - Daemon Sets
+    - Jobs
 
 ## Kubernetes commands
 
@@ -44,12 +49,11 @@ A simple setup can consist of eg one node with 2 services running on it. Each no
 
 ### Example for a replicated setup with several nodes
 
+There are several nodes which replicate each other. Beside the worked nodes, there are also master nodes.
 
-- Replicated setup with several nodes: Nodes gets managed by a master node
+- Worker nodes gets managed by a master node. The communcation between nodes happends via Services
 
-    - The communcation between nodes happends via Services
-
-- Master node with 4 processes running on each master node:
+- Each master node runs four different processes:
 
     - Api Server:
 
@@ -74,6 +78,8 @@ A simple setup can consist of eg one node with 2 services running on it. Each no
 
 ## Different variations
 
+Kubernetes has several different extensions or modules of different providers.
+
 - Kubernetes distributions: Kubernetes can be executed by different software:
     - Kubernetes (K8S): https://kubernetes.io/
     - [K3S](https://k3s.io/) - Lightweight Kubernetes
@@ -89,17 +95,20 @@ A simple setup can consist of eg one node with 2 services running on it. Each no
 - Data can be stored on volumes outside a container. There is a variety of volumes supported - see [https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/).
     - A `hostPath` volume mounts a file or directory from the host node's filesystem into your Pod.
     - A `glusterfs` volume allows a Glusterfs (an open source networked filesystem) volume to be mounted into your Pod. [Examples](https://github.com/kubernetes/examples/tree/master/volumes/glusterfs). Gluster can not be installed on Windows.
-
+    - NFS: Kubernetes can use a network file system (NFS) to store volumes. A NFS can be installed on the same machine as Kubernetes outside Kubernetes.
 
 ## basic kubectl commands
+
 `kubectl get nodes` - shows the known nodes
 `kubectl version` - shows the version number
 `kubectl get pod` - shows the pods
 `kubectl get pod -o wide` - shows the pods with more information, including ip
 `kubectl get services` - shows the services
 `kubectl get all` - shows everything
+`kubectl get all --all-namespaces` - shows everything
 
 ## deployments and pods
+
 Pods are not created directly. Instead, deployments are being created.
 `kubectl create deployment nginx-deployment --image=nginx` - create a deployment based on an image. Image will be downloaded from hub.docker.hub
 `kubectl get deployment` - shows the deployments
@@ -110,26 +119,28 @@ Deployments are being managed via kubectl. Deployments manage replicatesets whic
 `kubectl edit deployment nginx-deployment` - allows to edit the auto-generated config file of the specified deployment. Configuration will be automatically applied.
 
 ## Debugging pods
+
 `kubectl logs [podname]`
 `kubectl describe pod [podname]` - to get more info on a pod
 `kubectl exec -it [podname] -- bin/bash`  - interactive terminal of that pod
 
 ## Analysing services
-`kubectl describe service [servicename]`
 
+`kubectl describe service [servicename]`
 
 ## Configuration file
 
 Configuration files exist eg for deployments and services.
-
 It seems that kubernetes does not like underscores `_` in object names. Use `-` instead.
 
 ### Apply configuration file
+
 `kubectl apply -f configuration_file.yaml` - apply a configuration file, also execute to apply changes.
 `kubectl get deployment [deployment_name] - o yaml > configuration_file.yaml` - export config file, including status and other generated stuff (like timestamps).
 `kubectl delete -f configuration_file.yaml` - delete objects mentioned in aa configuration file.
 
 ### 3 parts in a configuration file
+
 - (header)
 - metadata
 - specification (spec)
@@ -138,6 +149,7 @@ It seems that kubernetes does not like underscores `_` in object names. Use `-` 
     - source etcd
 
 ### Yaml
+
 - Hint: Use Yaml Linter
 - strict indentation
 - store config file with your code / infrastructure as a code or separate git repo for config files
@@ -161,7 +173,7 @@ It seems that kubernetes does not like underscores `_` in object names. Use `-` 
 
 Yaml supports multiple files in one file, separated by a line with 3 minuses:
 
-```PS
+```YAML
 ---
 ```
 
@@ -170,35 +182,34 @@ Eg deployment and service in 1 file, because they belong together. Service refer
 - config_map allows to share configuration building blocks
 
 ## Publishing a service
+
 LoadBalancer and nodeport allow to publish a port
 check service configuation with `kubectl get service`
 `minikube service mongo-express-service`
 
-
 ## Namespace
-`kubectl get namespace`
-System namespaces contain infos on Kubernetes, eg similar to schema in SQL Server.
-default is `Default`.
 
-Allows to group kubernetes objects. Useful eg to group different things (like logging, nginx, etc.), or in case different teams are using the Kubernetes cluster, or for different environments (dev/uat/prod) in one cluster, and recycle some components (like logging)
+`kubectl get namespace`
+Namespaces allow to put kubernetes objects in groups. The default namespace is `Default`.
+Namespaces are useful to eg group different things (like logging, nginx, etc.), or in case different teams are using the Kubernetes cluster, or for different environments (dev/uat/prod) in one cluster, and recycle some components (like logging)
 
 One namespace can access another, eg with a reference like `service.namespace`
 
 `kubectl --namespace==namespace` The --namespace option allows to set the namespace. Also `-n` works.
 
-Tool kubens allows to set a default namespace
+Tool `kubens` allows to set a default namespace.
 
 ## Ingress
-kind: Ingress
 
-Implementation for ingress also needed - called Incress Controller. There are many third party implementations - see also  https://bit.ly/3mJHVFc.
+Ingress alllows to manage the access to a kubernetes cluster. 
+A specific implementation for an ingress also needs to be selected - called Incress Controller. There are several (third party implementations)[https://bit.ly/3mJHVFc].
 Moreover, an external loadbalancer/proxy server is needed to forward the traffic to the ingress controller.
 
-`minikube addons enable ingress` to start the ingress controller
+`minikube addons enable ingress` starts an ingress controller.
 
-kubectl apply, get et also works for ingress objects.
+`kubectl` also works for ingress objects.
 
-edit the hostfile to forward a url to an ingress controller
+To access an ingress controller based on a name (instead of IP adress), the hostfile of the machine can be edited.
 
 ingress allows to forward subdomains or specific url paths to specific services.
 
@@ -206,7 +217,7 @@ ingress allows to configure TLS certificate. There are also specific tls secrets
 
 ## Helm
 
-Helm is a package manager for Kubernetes. 
+Helm is a package manager for Kubernetes.
 
 Eg image you want to deploy the elastic stack for logging. You could install this with all its details (StatefulSet, ConfigMap, User, Secret, Services) on your own.
 The bundle of yaml files to deploy such a stack is called "helm charts". They are available in a helm repository.
@@ -216,11 +227,12 @@ This works simialr to docker, eg helm search or searching e.g. at https://artifa
 Helm is also a templating engine. I.e. kubernetes.yaml templates can be defined, and base them on an external configuration.
 Eg it takes values from values.yaml and put them into a  helm chart.  Values files can also be merged, eg standard values file and a customised values file.
 
-Helm also has a chart repository called Tiller for release management. Since Tiller has to much rights, it was deleted again with Helm version 3. However, it looks like a nice idea for infrastructre as code.
+Helm also has a chart repository called Tiller for release management. Since Tiller has to much rights, it was deleted again with Helm version 3. However, it is an illustration fot eh "infrastructre as code" concept.
 
 ## Volume
 
 Requirements:
+
 - A volume allows for storage that does not depend on the storage lifecycle.
 - Since a pod can be started on any cluster, the volume must be accessible to any node.
 - Storage needs to survive even if a cluster crashes.
@@ -231,13 +243,16 @@ Kubernetes allows for different storage types.
 Volumes are not in namespaces.
 
 There are different volume types:
+
 - Local volumes: Tied to specific node, do not survive crashes, ie not matching to two requirements.
 - Remote volumes
 
 ### Persistent volume Claims (PVC)
+
 Persistent volume claims allow to define the requirments of a service. A PVC will be mapped against a persistent volume. PVSs must be in the same namespace as the pod.
 
 ## Stateful Set
+
 A stateful applications needs to store some data. Alternatively, there are also stateless applications.
 
 Stateless applications are deployed using deployments. They can be easily replicated. 
@@ -256,7 +271,6 @@ Cloning and data synchronization as well as remote storage and back-up needs to 
 
 ## Kubernetes Services
 
-
 ## Kubernetes Dashboard
 
 For Kubernetes management and analysis, a dashboard is available
@@ -266,32 +280,33 @@ For Kubernetes management and analysis, a dashboard is available
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml`
 [Source](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
 
-### Get token for loging
+### Create a user
 
-Create user:
-```
+```powershell
 kubectl apply -f ./admin-user.yaml
 ```
-eyJhbGciOiJSUzI1NiIsImtpZCI6IjZLSHRlV28wQS10YkZNMVVTRkFqUFI5bXowQzRxQUliTE1JWlJrdGpsUVUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWc4emc1Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIzOTA3MmRhZC01ZmYwLTQxMDgtOGM2ZC1hYTI4NGI4YTljNzQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.AByBwxi9qPDYYs5AfYnukmh_uEAQKh5Saij2DBD5IFzcYgfDpUFntRCzo8CE0Kztac0X0FWx9qqsDu4pyImIN6xzilwjMIrxkQYvpWJnGbUmFt4cMH3W3-M2tckRsa8-xSiKNw2gshDCJPQfqgPgQnpmZYvR7f6NnJ1nyv1s7GJfQxjxC8XyNGqLDPIoJt2XlOQn5KYtMNryXyjDYjIHIszVTcjCvJoc6ktj0sq3zFDqIreCtKIeWvTzZ30bUTwxljNPjnM7jA6j7wNKqrtN3TRtgyD8KDQN7IcoSlxnEuRDkg-J4iAr7RKeGHGTkUPqJ3xIF-9zbSZcAEaF0Nh-6Q
-Get token with
+
+### Get a token for a kubernetes dashboard
+
 ```powershell
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | sls admin-user | ForEach-Object { $_ -Split '\s+' } | Select -First 1)
 ```
+
 [Source](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md)
 
-
-Connect to it: [URL](https://localhost:8443/)
-
+[Dashboard URL](https://localhost:8443/)
 
 ### Access  via proxy
+
 Create a proxy to connect to it with `kubectl proxy`
 Connect to it: [URL](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 
 ## Access Kubernetes dashboard with loadbalancer
+
 See yml file, start with
 `kubectl apply -f .\Kubernetes_configs\dashboard-loadbalancer.yml`
 Connect to it: [URL](https://localhost:8443/)
 
-
 ## Sources
-[Kubernetes Tutorial for Beginners](https://www.youtube.com/watch?v=X48VuDVv0do)
+
+- [Kubernetes Tutorial for Beginners](https://www.youtube.com/watch?v=X48VuDVv0do)
