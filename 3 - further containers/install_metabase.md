@@ -2,7 +2,7 @@
 Metabase (https://www.metabase.com/) is another tool to display data.
 
 ## Docker installation
-Regarding running it on docker, see the (doc)[https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html].
+Regarding running it on docker, see the [doc](https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html).
 Start it with:
 
 ```
