@@ -17,34 +17,29 @@ spec:
       containers:
       - name: jenkins-agent-python
         image: 050774/jenkins-agent-python:1.1
-        # volumeMounts:
-        # - name: jenkins-agent-python-pvc
-        #   mountPath: /var/jenkins/agent
-        # - name: mssql-bulk
-        #  mountPath: /var/opt/bulk
+        volumeMounts:
+        - name: jenkins-agent-python-pvc
+          mountPath: /var/jenkins/agent
+        - name: mssql-bulk
+          mountPath: /var/opt/bulk
         env:
         - name: JENKINS_URL
           value: http://jenkins:8080
         - name: JENKINS_AGENT_NAME
           value: python_0
-        # - name: JENKINS_AGENT_NAME
-        #   valueFrom:
-        #     fieldRef:
-        #       fieldPath: metadata.name
         - name: JENKINS_SECRET
-        # from zotac1
-        #  value: 9e1fc4e99ab01a56fc254a90a6e62061e31562ef5ea61bb69f4db1f96ae22acc # TODO: Load from secret file using `@secret_file_path` 
-          value: 2b576080e6da635da90d1480a86e3c4481bd9e878bebba3731b0963773873814 
+          # from kubernetes_jenkins agent          
+          value: 9e1fc4e99ab01a56fc254a90a6e62061e31562ef5ea61bb69f4db1f96ae22acc 
         - name: JENKINS_AGENT_WORKDIR
           value: /home/jenkins/agent
         - name: TZ
           value: Europe/Zurich
         securityContext:
             allowPrivilegeEscalation: false
-      # volumes:
-      # - name: mssql-bulk
-      #   persistentVolumeClaim:
-      #     claimName: mssql-bulk-pvc
+      volumes:
+      - name: mssql-bulk
+        persistentVolumeClaim:
+          claimName: mssql-bulk-pvc
 
   volumeClaimTemplates:
   - metadata:
