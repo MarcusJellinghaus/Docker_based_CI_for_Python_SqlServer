@@ -143,17 +143,26 @@ sudo exportfs -a
 sudo systemctl restart nfs-kernel-server
 ```
 
+## Install NFS client
+
+Install a client to connect to an NFS
+
+```sh
+sudo apt update
+sudo apt-get install nfs-client
+```
 
 ### Kubernetes NFS Provisioner
 
 Install a NFS provisioner in Kubernetes, accessing the NFS server
-```
+
+```sh
 kubectl apply -f nfs-provisioner.yaml
 ```
 
 ## Install actual services
 
-```
+```cmd
 kubectl apply -f mariadb.yaml
 kubectl apply -f shared-volume.yaml
 kubectl apply -f mssql.yaml
