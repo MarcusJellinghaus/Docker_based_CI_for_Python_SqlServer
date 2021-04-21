@@ -169,3 +169,79 @@ kubectl apply -f mssql.yaml
 kubectl apply -f jenkins.yaml
 kubectl apply -f jenkins_agent_python.yaml
 ```
+
+## Further enhancements to the Kubernetes based infrastructure
+
+### Draining and uncordoning a node
+
+I have several worker - and want to be able to shut them down some of them when they are not so busy.
+With the `drain` command, it is possible to remove pods from a node.
+With the `uncordon` command, it is possible to activate a node again.
+
+With `kubectl get pod -o wide`, it is possible to see the pods and the nodes they are running on.
+With `kubectl drain <node>`, it is possible to 'drain' a node.
+It might be necessary to use additional options, eg `kubectl drain <node> --force --ignore-daemonsets`.
+
+To activate a node again, type `kubectl uncordon <node>`.
+
+Sources:
+
+- [Disruptions](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
+- [Draining a node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/)
+
+### Node affinity
+
+Pods can be assigned to a certain node. Use the property `nodeSelector` as part of the property specification:
+
+```YAML
+kind: Pod
+spec:
+  nodeSelector:
+    disktype: ssd
+```
+
+Instead of a hard assingment, the affinity of a node can be assigned in a *soft* way
+
+```YAML
+kind: Pod
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: another-node-label-key
+            operator: In
+            values:
+            - another-node-label-value
+```
+
+The node can get the relevant label assigned:
+
+`kubectl label node <node> key=value`
+
+- To kill a pod, type `kubectl delete pods <pod>`. A new pod will be started, also respecting node affinity.
+
+Sources:
+
+- [Assigning a pod pod to a node](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
+- [Sample node affinity rules](https://docs.okd.io/latest/nodes/scheduling/nodes-scheduler-node-affinity.html)
+- [Assigning labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+- [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/)
+
+### drain on shortdown
+
+```
+[Unit]
+Description=drain this k8s node to make running pods time to gracefully shut down before stopping kubelet
+After=kubelet.service
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/true
+TimeoutStopSec=120s
+ExecStop=/bin/sh -c "/usr/local/bin/kubectl drain --ignore-daemonsets=true --delete-local-data=true $$(hostname -f) --kubeconfig /var/lib/kubelet/kubeconfig"
+[Install]
+WantedBy=multi-user.target
+```
