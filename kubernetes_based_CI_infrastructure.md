@@ -37,6 +37,10 @@ Kubernetes includes these components:
 - `kubeadm`: the [command](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) to bootstrap the cluster.
 - `kubelet`: the component that runs on all of the machines in your cluster and does things like starting pods and containers.
 
+## Installation of kubectl on a client machine
+
+To install kubectl, type `choco install kubernetes-cli`
+
 ## Kubernetes setup
 
 ### Example for a simple setup
@@ -154,7 +158,7 @@ It seems that kubernetes does not like underscores `_` in object names. Use `-` 
 - strict indentation
 - store config file with your code / infrastructure as a code or separate git repo for config files
 - deployments have a template in the spec, for the pod
-- labels (like eg `app:nginx`) connect the inforamtion
+- labels (like eg `app:nginx`) connect the information
 - ports:
     - pods (inside the deployment) have a containerport
     - services have a ports i the specs
