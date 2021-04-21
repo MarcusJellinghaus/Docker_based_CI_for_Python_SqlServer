@@ -40,6 +40,19 @@ spec:
       - name: mssql-bulk
         persistentVolumeClaim:
           claimName: mssql-bulk-pvc
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: performance
+                operator: In
+                values:
+                - medium
+                - high
+      # configure the node with `kubectl label node <node> performance=medium`
+      # nodes have no config files by themselves
 
   volumeClaimTemplates:
   - metadata:
